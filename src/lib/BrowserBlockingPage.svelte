@@ -16,11 +16,11 @@
         style="display: flex; align-items: top; padding: 5px; justify-content: center; border-bottom: dashed 1px black;"
       >
         <img
-          src="/security/1.svg"
+          src="security/1.svg"
           style="width: 30px; height: 30px; margin-top: 5px;"
         />
         <img
-          src="/security/firefox_1.png"
+          src="security/firefox_1.png"
           style="width: 50%; margin-left: 30px;"
         />
       </div>
@@ -28,11 +28,11 @@
         style="display: flex; align-items: top; padding: 5px; justify-content: center; border-bottom: dashed 1px black;"
       >
         <img
-          src="/security/2.svg"
+          src="security/2.svg"
           style="width: 30px; height: 30px; margin-top: 5px;"
         />
         <img
-          src="/security/firefox_2.png"
+          src="security/firefox_2.png"
           style="width: 50%; margin-left: 30px;"
         />
       </div>
@@ -40,11 +40,11 @@
         style="display: flex; align-items: top; padding: 5px; justify-content: center; border-bottom: dashed 1px black;"
       >
         <img
-          src="/security/done.svg"
+          src="security/done.svg"
           style="width: 30px; height: 30px; margin-top: 5px;"
         />
         <img
-          src="/security/firefox_done.png"
+          src="security/firefox_done.png"
           style="width: 50%; margin-left: 30px;"
         />
       </div>
