@@ -7,7 +7,7 @@
   import ReportTimeline from "./lib/ReportTimeline.svelte";
   import Legend from "./lib/Legend.svelte";
   import BrowserBlockingPage from "./lib/BrowserBlockingPage.svelte";
-
+  import load_icon from "/load2.svg";
   // const server_address = "http://localhost:5000";
   const server_address = "http://infovis.cs.ucdavis.edu/lyudao/api/v1";
 
@@ -286,7 +286,7 @@
           </div>
           {#if data_loading}
             <img
-              src="load2.svg"
+              src={load_icon}
               class="w-[5rem] h-[5rem] center_spin absolute"
               alt="*"
             />
@@ -305,7 +305,7 @@
       >
         {#if data_loading}
           <img
-            src="load2.svg"
+            src={load_icon}
             class="w-[5rem] h-[5rem] center_spin absolute"
             alt="*"
           />
