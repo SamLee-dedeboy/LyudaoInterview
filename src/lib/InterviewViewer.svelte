@@ -155,7 +155,7 @@
                     role="button"
                     tabindex={chunk_index}
                     id={chunk.id}
-                    class={`chunk clickable text-center w-[1.5rem] border border-black rounded`}
+                    class={`chunk clickable text-center text-sm w-[1.3rem] border border-black rounded`}
                     class:chunk-highlight={highlight_chunk[interview_index][
                       chunk_index
                     ]}

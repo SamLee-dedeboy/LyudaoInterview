@@ -22,13 +22,13 @@
     keywordsSelected: handleKeywordSelected,
     emotionSelected: handleEmotionSelected,
   };
-  const paddings = {
-    left: 300,
-    right: 300,
-    top: 300,
-    bottom: 300,
-  };
   $: width = container?.clientWidth;
+  $: paddings = {
+    left: 0.3 * width,
+    right: 0.3 * width,
+    top: 0.3 * height,
+    bottom: 0.3 * height,
+  };
   $: height = container?.clientHeight;
   $: if (width && height)
     simgraph.init(svgId, width, height, paddings, handlers);

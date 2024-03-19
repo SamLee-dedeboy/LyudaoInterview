@@ -274,7 +274,7 @@
   {:else}
     <div class="page flex space-x-1 h-full">
       <div
-        class="flex flex-col justify-center items-center flex-1 h-full w-full basis-[70%] shrink-0"
+        class="flex flex-col justify-center items-center flex-1 h-full grow min-w-[70rem] max-w-[90%]"
       >
         <!-- <Search on:search={(e) => searchQuery(e.detail)}></Search> -->
         <div class="w-full h-full relative">
@@ -300,9 +300,7 @@
           ></SimGraph>
         </div>
       </div>
-      <div
-        class="interview-viewer-container h-full w-full basis-[31%] relative"
-      >
+      <div class="interview-viewer-container h-full max-w-[20%] relative">
         {#if data_loading}
           <img
             src={load_icon}

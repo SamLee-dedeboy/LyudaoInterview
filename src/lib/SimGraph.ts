@@ -123,8 +123,10 @@ export const simgraph = {
     update_chunks(groups, group_ccs, emotionColorScale) {
         const group_node_sizes = Object.keys(groups).map(group_id => groups[group_id].length)
         const bbox_min_max_size = [d3.min(group_node_sizes), d3.max(group_node_sizes)]
-        const bboxRadiusScale = d3.scaleLinear().domain(bbox_min_max_size).range([150, 280])
-        const bboxes = radialBboxes(Object.keys(groups), this.width, this.height, {width: 200, height: 200})
+        console.log({groups, bbox_min_max_size})
+        const radius = Math.min(this.width, this.height) / 2
+        const bboxRadiusScale = d3.scaleLinear().domain(bbox_min_max_size).range([radius/3, radius/2])
+        const bboxes = radialBboxes(Object.keys(groups), this.width, this.height, {width: this.width/5, height: this.height/5})
         const chunk_region = d3.select("#" + this.svgId).select("g.chunk_region")
         const self = this
         chunk_region.selectAll("g.topic")
@@ -156,7 +158,7 @@ export const simgraph = {
                     .data(groups[d])
                     .join("circle")
                     .attr("class", "node")
-                    .attr("r", (d) => {return 5})
+                    .attr("r", self.width/350)
                     // .attr("r", (d) => {return scaleRadius(d.degree)})
                     // .attr("fill", (d) => topicColors(d.topic))
                     .attr("fill", (d) => {return emotionColorScale(d.emotion)})
