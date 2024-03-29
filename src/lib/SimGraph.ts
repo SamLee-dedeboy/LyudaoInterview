@@ -123,9 +123,9 @@ export const simgraph = {
     update_chunks(groups, group_ccs, emotionColorScale) {
         const group_node_sizes = Object.keys(groups).map(group_id => groups[group_id].length)
         const bbox_min_max_size = [d3.min(group_node_sizes), d3.max(group_node_sizes)]
-        console.log({groups, bbox_min_max_size})
+        console.log({groups, group_ccs, bbox_min_max_size})
         const radius = Math.min(this.width, this.height) / 2
-        const bboxRadiusScale = d3.scaleLinear().domain(bbox_min_max_size).range([radius/3, radius/2])
+        const bboxRadiusScale = d3.scaleLinear().domain(bbox_min_max_size).range([radius/3.5, radius/2])
         const bboxes = radialBboxes(Object.keys(groups), this.width, this.height, {width: this.width/5, height: this.height/5})
         const chunk_region = d3.select("#" + this.svgId).select("g.chunk_region")
         const self = this
@@ -206,6 +206,7 @@ export const simgraph = {
                 groups[d].forEach(node => {
                     nodes_dict[node.id] = node
                 })
+                console.log(group_ccs)
                 const collisionForce = d3.forceSimulation(groups[d])
                     .alphaMin(0.1)
                     .force("collide", d3.forceCollide(node_radius))
@@ -215,57 +216,59 @@ export const simgraph = {
                         nodes.attr("cx", d => d.x=clip(d.x, [bbox_center[0] - bbox_size/2 + node_radius, bbox_center[0] + bbox_size/2 - node_radius]))
                         .attr("cy", d => d.y=clip(d.y, [bbox_center[1] - bbox_size/2 + node_radius, bbox_center[1] + bbox_size/2 - node_radius]));
                         let cc_paths: any[] = []
-                        group_ccs[d].forEach((cc, index) => {
-                            const cc_nodes = cc.map(node_id => nodes_dict[node_id])
-                            cc_paths.push(
-                                {
-                                    topic: d,
-                                    index: index,
-                                    path: generate_border(group, cc_nodes, node_radius)
-                                }
-                        )
-                        })
-                        group.selectAll("path.border")
-                            .data(cc_paths)
-                            .join(
-                                enter => enter.append("path")
-                                    .attr("class", "border")
-                                    .attr("d", d => d.path)
-                                    .attr("fill", "#ebebeb")
-                                    .attr("stroke", "gray")
-                                    .attr("stroke-width", 1)
-                                    .attr("filter", "url(#drop-shadow-border)")
-                                    .attr("cursor", "pointer"),
-                                    // .raise(),
-                                update => update.transition().duration(0).attr("d", d => d.path)
-                            )
-                            .selection()
-                            .on("click", function(e, d) {
-                                e.preventDefault()
-                                d3.selectAll("path.border").classed("border-highlight", false)
-                                const nodes = d3.selectAll("circle.node")
-                                    .classed("node-highlight", false)
-                                    .classed("node-not-highlight", true)
-                                if(self.clicked_cc[0] === d.topic && self.clicked_cc[1] === d.index) {
-                                    self.clicked_cc = [null, null]
-                                    self.handlers.nodesSelected(null, null)
-                                    nodes.classed("node-highlight", false)
-                                    .classed("node-not-highlight", false)
-                                }
-                                else {
-                                    self.clicked_cc = [d.topic, d.index]
-                                    self.clicked_topic = null
-                                    d3.selectAll("text.topic-label").classed("topic-label-highlight", false)
-                                    d3.select(this).classed("border-highlight", true)
-                                    const cc_node_ids = group_ccs[d.topic][d.index]
-                                    const cc_nodes = cc_node_ids.map(node_id => nodes_dict[node_id])
-                                    self.handlers.nodesSelected(cc_nodes, d.topic + "(部分)")
-                                    self.highlighted_nodes = cc_nodes
-                                    nodes.filter(node => cc_node_ids.includes(node.id))
-                                        .classed("node-not-highlight", false)
-                                        .classed("node-highlight", true)
-                                }
+                        if(group_ccs[d]) {
+                            group_ccs[d].forEach((cc, index) => {
+                                const cc_nodes = cc.map(node_id => nodes_dict[node_id])
+                                cc_paths.push(
+                                    {
+                                        topic: d,
+                                        index: index,
+                                        path: generate_border(group, cc_nodes, node_radius)
+                                    }
+                                )
                             })
+                            group.selectAll("path.border")
+                                .data(cc_paths)
+                                .join(
+                                    enter => enter.append("path")
+                                        .attr("class", "border")
+                                        .attr("d", d => d.path)
+                                        .attr("fill", "#ebebeb")
+                                        .attr("stroke", "gray")
+                                        .attr("stroke-width", 1)
+                                        .attr("filter", "url(#drop-shadow-border)")
+                                        .attr("cursor", "pointer"),
+                                        // .raise(),
+                                    update => update.transition().duration(0).attr("d", d => d.path)
+                                )
+                                .selection()
+                                .on("click", function(e, d) {
+                                    e.preventDefault()
+                                    d3.selectAll("path.border").classed("border-highlight", false)
+                                    const nodes = d3.selectAll("circle.node")
+                                        .classed("node-highlight", false)
+                                        .classed("node-not-highlight", true)
+                                    if(self.clicked_cc[0] === d.topic && self.clicked_cc[1] === d.index) {
+                                        self.clicked_cc = [null, null]
+                                        self.handlers.nodesSelected(null, null)
+                                        nodes.classed("node-highlight", false)
+                                        .classed("node-not-highlight", false)
+                                    }
+                                    else {
+                                        self.clicked_cc = [d.topic, d.index]
+                                        self.clicked_topic = null
+                                        d3.selectAll("text.topic-label").classed("topic-label-highlight", false)
+                                        d3.select(this).classed("border-highlight", true)
+                                        const cc_node_ids = group_ccs[d.topic][d.index]
+                                        const cc_nodes = cc_node_ids.map(node_id => nodes_dict[node_id])
+                                        self.handlers.nodesSelected(cc_nodes, d.topic + "(部分)")
+                                        self.highlighted_nodes = cc_nodes
+                                        nodes.filter(node => cc_node_ids.includes(node.id))
+                                            .classed("node-not-highlight", false)
+                                            .classed("node-highlight", true)
+                                    }
+                                })
+                            }
                         node_group.raise()
 
                     })
@@ -285,6 +288,7 @@ export const simgraph = {
         // const scaleOpacity = d3.scalePow().exponent(2)
         //     .domain([0, d3.max(data_bins, d => d.length)])
         //     .range([0, 1]);
+        console.log(Object.keys(keyword_data.keyword_coordinates), keyword_data.keyword_statistics)
         const binSumFrequency = (bins) => d3.sum(bins, keyword => keyword_data.keyword_statistics[keyword].frequency)
         const binMaxFrequency = d3.max(data_bins, binSumFrequency)
         const scaleColor = d3.scaleSequential([0, Math.sqrt(binMaxFrequency)], d3.interpolateBlues)
@@ -927,8 +931,8 @@ function clip(x, range) {
 
 function radialBboxes(groups, width, height, maxBboxSize) {
     console.log(groups)
-    groups[0] = "環境生態"
-    groups[7] = "整體經濟"
+    // groups[0] = "環境生態"
+    // groups[7] = "整體經濟"
     const angleScale = d3.scaleBand().domain(groups).range([0, 0+Math.PI * 2])
     let bboxes = {}
     const a = width/2 - maxBboxSize.width/2 - 38
