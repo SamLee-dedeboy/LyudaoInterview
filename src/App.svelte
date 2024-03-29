@@ -8,8 +8,8 @@
   import Legend from "./lib/Legend.svelte";
   import BrowserBlockingPage from "./lib/BrowserBlockingPage.svelte";
   import load_icon from "/load2.svg";
-  const server_address = "http://localhost:5000";
-  // const server_address = "http://infovis.cs.ucdavis.edu/lyudao/api/v1";
+  // const server_address = "http://localhost:5000";
+  const server_address = "http://infovis.cs.ucdavis.edu/lyudao/api/v1";
 
   let interview_data: any = undefined;
   let report_data: any = undefined;
