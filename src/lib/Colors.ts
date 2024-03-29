@@ -25,7 +25,7 @@ export const categoricalColors = [
     "#fdbf6f",
   ];
 
-export const emotions = ["Proud", "Resigned", "Angry", "Worried", "Neutral"];
+export const emotions = ["proud", "resigned", "angry", "worried", "neutral"];
 export const emotionColorScale = d3
     .scaleOrdinal()
     .domain(emotions)

@@ -217,6 +217,7 @@
   }
 
   function handleEmotionSelected(emotion) {
+    // emotion = emotion.toLowerCase();
     console.log({ emotion }, topic_data.nodes);
     selectedEmotion = emotion;
     if (!emotion) {
